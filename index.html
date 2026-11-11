@@ -1,44 +1,60 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>معالج ومنظف المدونات العربية | Arabic Corpus Preprocessor</title>
-  <meta name="description" content="أداة ويب مفتوحة المصدر لمعالجة وتنظيف المدونات والنصوص العربية محلياً بالكامل داخل المتصفح وبأعلى درجات الخصوصية والأداء.">
+  <title>منظف ومعالج المدونات | Corpus Cleaner</title>
+  <meta name="description" content="أداة ويب حديثة ومفتوحة المصدر لمعالجة وتنظيف المدونات والنصوص العربية والإنجليزية محلياً بالكامل داخل المتصفح وبأعلى درجات الخصوصية والأداء.">
   <meta name="theme-color" content="#10b981">
   
-  <!-- Google Fonts: IBM Plex Sans Arabic & Cairo -->
+  <!-- Google Fonts: IBM Plex Sans Arabic & Cairo & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['IBM Plex Sans Arabic', 'Cairo', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
   
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-[#0b0f19] text-gray-100 antialiased min-h-screen flex flex-col">
+<body class="antialiased min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="border-b border-gray-800/80 bg-gray-950/60 backdrop-blur-md sticky top-0 z-40 transition-colors">
+  <header class="app-header sticky top-0 z-40 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- Brand & Title -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3.5">
         <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-emerald-900/30">
-          نص
+          <svg class="w-6 h-6 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+          </svg>
         </div>
         <div>
-          <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            معالج المدونات العربية
-            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono font-medium">v1.0</span>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight text-main flex items-center gap-2">
+            <span>منظف المدونات</span>
+            <span class="text-sm font-normal text-muted-custom">| Corpus Cleaner</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-mono font-medium">v2.0</span>
           </h1>
-          <p class="text-xs text-gray-400 hidden sm:block">Arabic Corpus Preprocessor & Cleaner • أداة بحثية مفتوحة المصدر</p>
+          <p class="text-xs text-muted-custom hidden sm:block">Multi-Language Corpus Preprocessor • أداة بحثية لمعالجة المدونات العربية والإنجليزية</p>
         </div>
       </div>
 
-      <!-- Privacy Pledge & Links -->
+      <!-- Privacy Pledge & Controls -->
       <div class="flex items-center gap-3">
         <div class="badge badge-privacy hidden md:flex" title="الملفات تتم معالجتها داخل ذاكرة المتصفح فقط عبر JavaScript">
           <span class="text-sm">🔒</span>
@@ -46,8 +62,9 @@
         </div>
 
         <!-- Theme Toggle -->
-        <button id="themeToggleBtn" class="btn-secondary text-xs px-3 py-2" title="تبديل مظهر الموقع">
-          ☀️ <span class="hidden sm:inline">الوضع الفاتح</span>
+        <button id="themeToggleBtn" type="button" class="btn-secondary text-xs px-3 py-2" title="تبديل مظهر الموقع بين الفاتح والداكن">
+          <span id="themeToggleIcon">☀️</span>
+          <span id="themeToggleText" class="hidden sm:inline">الوضع الفاتح</span>
         </button>
 
         <!-- GitHub Repo Link -->
@@ -66,7 +83,7 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
     <!-- Privacy Banner (Mobile) -->
-    <div class="md:hidden glass-card p-3 flex items-center justify-center gap-2 text-xs text-emerald-400 bg-emerald-950/20 border-emerald-800/40">
+    <div class="md:hidden glass-card p-3 flex items-center justify-center gap-2 text-xs text-emerald-500 bg-emerald-500/10 border-emerald-500/20">
       <span>🔒</span>
       <span>جميع النصوص تُعالج محلياً على جهازك؛ لا يتم رفع أي ملف لأي خادم.</span>
     </div>
@@ -77,13 +94,13 @@
         <input type="file" id="fileInput" multiple accept=".txt,text/plain" class="hidden">
         <input type="file" id="folderInput" webkitdirectory directory multiple class="hidden">
 
-        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
           📂
         </div>
-        <h3 class="text-lg sm:text-xl font-bold text-white mb-2">
+        <h3 class="text-lg sm:text-xl font-bold text-main mb-2">
           اسحب وأفلت ملفات النصوص (.txt) هنا
         </h3>
-        <p class="text-sm text-gray-400 max-w-md mx-auto mb-5">
+        <p class="text-sm text-muted-custom max-w-md mx-auto mb-5">
           يمكنك اختيار ملف واحد أو مئات الملفات دفعة واحدة؛ وتتم المعالجة فورياً في متصفحك.
         </p>
 
@@ -98,158 +115,290 @@
       </div>
     </section>
 
-    <!-- Presets & Cleaning Options Card -->
+    <!-- Language & Cleaning Options Section -->
     <section class="glass-card p-6 space-y-6">
       
-      <!-- Presets Selector -->
-      <div>
-        <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <span>⚡</span>
-            <span>القوالب السريعة (Quick Presets)</span>
+      <!-- Language Mode Switcher -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-theme">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-main flex items-center gap-2">
+            <span>⚙️</span>
+            <span>خيارات لغة المدونة والمعالجة (Language & Cleaning Pipeline)</span>
           </h2>
-          <span class="text-xs text-gray-400">اختر قالباً معداً مسبقاً أو خصص الخيارات بالأسفل</span>
+          <p class="text-xs text-muted-custom mt-0.5">اختر نوع المدونة المستهدفة لتفعيل إعدادات التنظيف المخصصة لكل لغة</p>
         </div>
 
-        <div class="flex items-center gap-2.5 flex-wrap">
-          <button type="button" class="preset-btn active" data-preset="linguistics">
-            <span>📚</span>
-            <span>تحليل نحوي ودلالي (حاسوبويه)</span>
+        <!-- Language Tabs -->
+        <div class="inline-flex p-1 rounded-xl bg-theme-tertiary border border-theme self-stretch sm:self-auto justify-center">
+          <button type="button" id="langTabArabic" class="lang-tab-btn active" data-lang="arabic">
+            <span class="text-base">🇸🇦</span>
+            <span>العربية (Arabic)</span>
           </button>
-          <button type="button" class="preset-btn" data-preset="ir_search">
-            <span>🔍</span>
-            <span>استرجاع معلومات وبحث (IR)</span>
-          </button>
-          <button type="button" class="preset-btn" data-preset="comprehensive">
-            <span>🌟</span>
-            <span>تنظيف شامل (All)</span>
-          </button>
-          <button type="button" class="preset-btn" data-preset="light">
-            <span>🧹</span>
-            <span>تنظيف خفيف</span>
+          <button type="button" id="langTabEnglish" class="lang-tab-btn" data-lang="english">
+            <span class="text-base">🇬🇧</span>
+            <span>English (الإنجليزية)</span>
           </button>
         </div>
       </div>
 
-      <div class="border-t border-gray-800/80"></div>
-
-      <!-- 12 Options Grid -->
-      <div>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <span>⚙️</span>
-            <span>خيارات التنظيف والتطبيع (12 خيار معالجة)</span>
-          </h2>
-          <span class="text-xs text-emerald-400 font-mono">تحديث حي وفوري</span>
+      <!-- ARABIC OPTIONS GRID -->
+      <div id="arabicOptionsSection" class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-emerald-500 flex items-center gap-1.5">
+            <span>🔹</span>
+            <span>إعدادات معالجة وتطبيع النصوص العربية (Arabic NLP Options)</span>
+          </span>
+          <span class="text-xs text-muted-custom font-mono">تحديث فوري</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
           
           <!-- Option 1: Tashkeel -->
-          <label class="toggle-card active" data-option="removeTashkeel">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeTashkeel">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">إزالة التشكيل</span>
-              <span class="text-gray-400">حذف الحركات والتنوين والشدة والسكون</span>
+              <span class="font-bold block text-sm text-main">إزالة التشكيل</span>
+              <span class="text-muted-custom">حذف الحركات والتنوين والشدة والسكون</span>
             </div>
           </label>
 
           <!-- Option 2: Alef -->
-          <label class="toggle-card active" data-option="normalizeAlef">
+          <label class="toggle-card active" data-lang="arabic" data-option="normalizeAlef">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">تطبيع الألف</span>
-              <span class="text-gray-400">توحيد (أ، إ، آ، ٱ) إلى ألف مجردة (ا)</span>
+              <span class="font-bold block text-sm text-main">تطبيع الألف</span>
+              <span class="text-muted-custom">توحيد (أ، إ، آ، ٱ) إلى ألف مجردة (ا)</span>
             </div>
           </label>
 
           <!-- Option 3: Yaa -->
-          <label class="toggle-card active" data-option="normalizeYaa">
+          <label class="toggle-card active" data-lang="arabic" data-option="normalizeYaa">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">تطبيع الياء</span>
-              <span class="text-gray-400">توحيد الألف المقصورة (ى) إلى ياء (ي)</span>
+              <span class="font-bold block text-sm text-main">تطبيع الياء</span>
+              <span class="text-muted-custom">توحيد الألف المقصورة (ى) إلى ياء (ي)</span>
             </div>
           </label>
 
           <!-- Option 4: Kashida -->
-          <label class="toggle-card active" data-option="removeKashida">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeKashida">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">إزالة الكشيدة / التطويل</span>
-              <span class="text-gray-400">حذف شرطة المد الزخرفية (ـ) بين الحروف</span>
+              <span class="font-bold block text-sm text-main">إزالة الكشيدة / التطويل</span>
+              <span class="text-muted-custom">حذف شرطة المد الزخرفية (ـ) بين الحروف</span>
             </div>
           </label>
 
           <!-- Option 5: HTML -->
-          <label class="toggle-card active" data-option="removeHtml">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeHtml">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">إزالة وسوم HTML</span>
-              <span class="text-gray-400">حذف الوسوم وفك شفرات &amp;nbsp; وغيرها</span>
+              <span class="font-bold block text-sm text-main">إزالة وسوم HTML</span>
+              <span class="text-muted-custom">حذف الوسوم وفك شفرات &amp;nbsp; وغيرها</span>
             </div>
           </label>
 
           <!-- Option 6: Markdown -->
-          <label class="toggle-card active" data-option="removeMarkdown">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeMarkdown">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">إزالة علامات ماركداون</span>
-              <span class="text-gray-400">حذف العناوين والتنسيق مع إبقاء نصوص الروابط</span>
+              <span class="font-bold block text-sm text-main">إزالة علامات ماركداون</span>
+              <span class="text-muted-custom">حذف العناوين والتنسيق مع إبقاء نصوص الروابط</span>
             </div>
           </label>
 
           <!-- Option 7: Links -->
-          <label class="toggle-card active" data-option="removeLinks">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeLinks">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">إزالة الروابط (URLs)</span>
-              <span class="text-gray-400">حذف عناوين المواقع http:// و www</span>
+              <span class="font-bold block text-sm text-main">إزالة الروابط والبريد</span>
+              <span class="text-muted-custom">حذف عناوين المواقع والبريد الإلكتروني</span>
             </div>
           </label>
 
           <!-- Option 8: Strange Chars -->
-          <label class="toggle-card active" data-option="removeStrangeChars">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeStrangeChars">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">المحارف الغريبة والإيموجي</span>
-              <span class="text-gray-400">حذف محارف التحكم وعلامات الاتجاه الخفية</span>
+              <span class="font-bold block text-sm text-main">المحارف الغريبة والإيموجي</span>
+              <span class="text-muted-custom">حذف محارف التحكم وعلامات الاتجاه الخفية</span>
             </div>
           </label>
 
           <!-- Option 9: Extra Spaces -->
-          <label class="toggle-card active" data-option="removeExtraSpaces">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeExtraSpaces">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">تنظيف المسافات الزائدة</span>
-              <span class="text-gray-400">تقليص الفراغات المتكررة ومسافات أطراف السطور</span>
+              <span class="font-bold block text-sm text-main">تنظيف المسافات الزائدة</span>
+              <span class="text-muted-custom">تقليص الفراغات المتكررة ومسافات أطراف السطور</span>
             </div>
           </label>
 
           <!-- Option 10: Extra Lines -->
-          <label class="toggle-card active" data-option="removeExtraLines">
+          <label class="toggle-card active" data-lang="arabic" data-option="removeExtraLines">
             <input type="checkbox" class="toggle-checkbox" checked>
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">اختزال الأسطر الفارغة</span>
-              <span class="text-gray-400">تقليص الأسطر الفارغة المتتالية لسطر فاصل واحد</span>
+              <span class="font-bold block text-sm text-main">اختزال الأسطر الفارغة</span>
+              <span class="text-muted-custom">تقليص الأسطر المتتالية لسطر فاصل واحد</span>
             </div>
           </label>
 
-          <!-- Option 11: Taa Marbuta (Default unchecked for semantics) -->
-          <label class="toggle-card" data-option="normalizeTaaHaa">
+          <!-- Option 11: Taa Marbuta -->
+          <label class="toggle-card" data-lang="arabic" data-option="normalizeTaaHaa">
             <input type="checkbox" class="toggle-checkbox">
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">تطبيع التاء المربوطة</span>
-              <span class="text-gray-400">تحويل (ة) إلى (ه) - <span class="text-amber-400">حذر: قد تلتبس بالضمائر</span></span>
+              <span class="font-bold block text-sm text-main">تطبيع التاء المربوطة</span>
+              <span class="text-muted-custom">تحويل (ة) إلى (ه) - <span class="text-amber-500 font-medium">حذر: قد تلتبس بالضمائر</span></span>
             </div>
           </label>
 
-          <!-- Option 12: Hamza Seated (Default unchecked for semantics) -->
-          <label class="toggle-card" data-option="normalizeHamza">
+          <!-- Option 12: Hamza Seated -->
+          <label class="toggle-card" data-lang="arabic" data-option="normalizeHamza">
             <input type="checkbox" class="toggle-checkbox">
             <div class="text-xs leading-relaxed">
-              <span class="font-bold block text-sm text-gray-200">تطبيع الهمزات (ؤ، ئ)</span>
-              <span class="text-gray-400">تحويل (ؤ -> و) و (ئ -> ي)</span>
+              <span class="font-bold block text-sm text-main">تطبيع الهمزات (ؤ، ئ)</span>
+              <span class="text-muted-custom">تحويل (ؤ -> و) و (ئ -> ي)</span>
+            </div>
+          </label>
+
+          <!-- Option 13: Punctuation (Optional) -->
+          <label class="toggle-card" data-lang="arabic" data-option="removePunctuation">
+            <input type="checkbox" class="toggle-checkbox">
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">إزالة علامات الترقيم</span>
+              <span class="text-muted-custom">حذف الفواصل والنقاط والأقواس وعلامات الاستفهام</span>
+            </div>
+          </label>
+
+          <!-- Option 14: Numbers (Optional) -->
+          <label class="toggle-card" data-lang="arabic" data-option="removeNumbers">
+            <input type="checkbox" class="toggle-checkbox">
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">إزالة الأرقام</span>
+              <span class="text-muted-custom">حذف الأرقام العربية والمشرقية (٠-٩ و 0-9)</span>
+            </div>
+          </label>
+
+        </div>
+      </div>
+
+      <!-- ENGLISH OPTIONS GRID -->
+      <div id="englishOptionsSection" class="space-y-4" style="display: none;">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-emerald-500 flex items-center gap-1.5">
+            <span>🔹</span>
+            <span>English NLP Corpus Preprocessing Settings</span>
+          </span>
+          <span class="text-xs text-muted-custom font-mono">Live updates</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+          
+          <!-- Eng Option 1: Lowercase -->
+          <label class="toggle-card active" data-lang="english" data-option="toLowerCase">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Convert to Lowercase</span>
+              <span class="text-muted-custom">تحويل النص بأكمله إلى أحرف صغيرة (lowercase)</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 2: Expand Contractions -->
+          <label class="toggle-card active" data-lang="english" data-option="expandContractions">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Expand Contractions</span>
+              <span class="text-muted-custom">فك الاختصارات (don't &rarr; do not, can't &rarr; cannot)</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 3: Remove Accents -->
+          <label class="toggle-card active" data-lang="english" data-option="removeAccents">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Normalize Accents</span>
+              <span class="text-muted-custom">تطبيع النبرات اللاتينية (café &rarr; cafe, naïve &rarr; naive)</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 4: Remove HTML -->
+          <label class="toggle-card active" data-lang="english" data-option="removeHtml">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove HTML Tags</span>
+              <span class="text-muted-custom">إزالة وسوم HTML وفك شفرات &amp;amp; &amp;quot;</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 5: Remove Markdown -->
+          <label class="toggle-card active" data-lang="english" data-option="removeMarkdown">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove Markdown</span>
+              <span class="text-muted-custom">إزالة تنسيقات الماركداون مع حفظ نصوص الروابط</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 6: Remove Links -->
+          <label class="toggle-card active" data-lang="english" data-option="removeLinks">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove URLs &amp; Links</span>
+              <span class="text-muted-custom">حذف عناوين المواقع والروابط (http://, https://)</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 7: Remove Emails -->
+          <label class="toggle-card active" data-lang="english" data-option="removeEmails">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove Email Addresses</span>
+              <span class="text-muted-custom">حذف عناوين البريد الإلكتروني</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 8: Remove Strange Chars -->
+          <label class="toggle-card active" data-lang="english" data-option="removeStrangeChars">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove Emojis &amp; Symbols</span>
+              <span class="text-muted-custom">حذف الرموز التعبيرية ومحارف التحكم الخفية</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 9: Extra Spaces -->
+          <label class="toggle-card active" data-lang="english" data-option="removeExtraSpaces">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Normalize Spaces</span>
+              <span class="text-muted-custom">تنظيف المسافات والتبويبات الزائدة وأطراف الأسطر</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 10: Extra Lines -->
+          <label class="toggle-card active" data-lang="english" data-option="removeExtraLines">
+            <input type="checkbox" class="toggle-checkbox" checked>
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Reduce Blank Lines</span>
+              <span class="text-muted-custom">تقليص الأسطر الفارغة المتتالية لسطر فاصل واحد</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 11: Punctuation -->
+          <label class="toggle-card" data-lang="english" data-option="removePunctuation">
+            <input type="checkbox" class="toggle-checkbox">
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove Punctuation</span>
+              <span class="text-muted-custom">حذف علامات الترقيم الإنجليزية (! ? . , ; : " ' -)</span>
+            </div>
+          </label>
+
+          <!-- Eng Option 12: Numbers -->
+          <label class="toggle-card" data-lang="english" data-option="removeNumbers">
+            <input type="checkbox" class="toggle-checkbox">
+            <div class="text-xs leading-relaxed">
+              <span class="font-bold block text-sm text-main">Remove Numbers / Digits</span>
+              <span class="text-muted-custom">حذف الأرقام والبيانات العددية (0-9)</span>
             </div>
           </label>
 
@@ -261,32 +410,32 @@
     <!-- Real-time KPI Stats Grid -->
     <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
       <div class="kpi-card">
-        <span class="text-xs text-gray-400 block">الملفات المرفوعة</span>
+        <span class="text-xs text-muted-custom block">الملفات المرفوعة</span>
         <div id="kpiFilesCount" class="kpi-value">0</div>
       </div>
       <div class="kpi-card">
-        <span class="text-xs text-gray-400 block">الأحرف قبل المعالجة</span>
-        <div id="kpiCharsBefore" class="kpi-value text-gray-200">0</div>
+        <span class="text-xs text-muted-custom block">الأحرف قبل المعالجة</span>
+        <div id="kpiCharsBefore" class="kpi-value text-main">0</div>
       </div>
       <div class="kpi-card">
-        <span class="text-xs text-gray-400 block">الأحرف بعد المعالجة</span>
-        <div id="kpiCharsAfter" class="kpi-value text-emerald-400">0</div>
+        <span class="text-xs text-muted-custom block">الأحرف بعد المعالجة</span>
+        <div id="kpiCharsAfter" class="kpi-value text-emerald-500">0</div>
       </div>
       <div class="kpi-card">
-        <span class="text-xs text-gray-400 block">نسبة التخفيض في الحجم</span>
+        <span class="text-xs text-muted-custom block">نسبة التخفيض في الحجم</span>
         <div id="kpiReductionPct" class="kpi-value text-teal-400">0%</div>
       </div>
       <div class="kpi-card col-span-2 sm:col-span-1">
-        <span class="text-xs text-gray-400 block">سرعة المعالجة الكلية</span>
+        <span class="text-xs text-muted-custom block">سرعة المعالجة الكلية</span>
         <div id="kpiProcessTime" class="kpi-value text-indigo-400">0 ms</div>
       </div>
     </section>
 
     <!-- Empty State Message -->
-    <div id="emptyState" class="glass-card p-12 text-center text-gray-400">
+    <div id="emptyState" class="glass-card p-12 text-center text-muted-custom">
       <div class="text-4xl mb-3">📑</div>
-      <h3 class="text-base font-semibold text-gray-300 mb-1">لم يتم رفع أي ملفات حتى الآن</h3>
-      <p class="text-xs text-gray-500">قم بسحب وإفلات ملفاتك النصية (.txt) في المنطقة العلوية لبدء المعالجة والمعاينة الفورية.</p>
+      <h3 class="text-base font-semibold text-main mb-1">لم يتم رفع أي ملفات حتى الآن</h3>
+      <p class="text-xs text-muted-custom">قم بسحب وإفلات ملفاتك النصية (.txt) في المنطقة العلوية لبدء المعالجة والمعاينة الفورية.</p>
     </div>
 
     <!-- Files Section (Hidden when no files) -->
@@ -295,34 +444,34 @@
       <!-- Section Header & Actions -->
       <div class="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <h2 class="text-base font-bold text-main flex items-center gap-2">
             <span>📋</span>
-            <span>قائمة النصوص المعالجة</span>
+            <span>قائمة النصوص والمعاينة السريعة</span>
           </h2>
-          <p class="text-xs text-gray-400">اضغط على زر المعاينة لمشاهدة الفروق قبل وبعد المعالجة جنباً إلى جنب</p>
+          <p class="text-xs text-muted-custom">يظهر أسفل كل ملف مقتطف للمعاينة المباشرة، مع إمكانية عرض الفروق الملونة جنباً إلى جنب</p>
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
           <!-- Suffix Toggle Checkbox -->
-          <label class="flex items-center gap-2 text-xs text-gray-300 cursor-pointer select-none bg-gray-900/60 px-3 py-2 rounded-lg border border-gray-800">
+          <label class="flex items-center gap-2 text-xs text-main cursor-pointer select-none bg-theme-tertiary px-3 py-2 rounded-lg border border-theme">
             <input type="checkbox" id="appendSuffixCheckbox" class="accent-emerald-500 rounded" checked>
-            <span>إضافة <code class="text-emerald-400 font-mono">_cleaned</code> لأسماء الملفات</span>
+            <span>إضافة <code class="text-emerald-500 font-mono">_cleaned</code> لأسماء الملفات</span>
           </label>
 
           <!-- Download ZIP Button -->
-          <button id="downloadZipBtn" class="btn-primary text-sm">
+          <button id="downloadZipBtn" type="button" class="btn-primary text-sm">
             <span>📦</span>
             <span>تنزيل جميع الملفات (ZIP)</span>
           </button>
 
           <!-- Export Decisions CSV -->
-          <button id="exportCsvBtn" class="btn-secondary text-sm">
+          <button id="exportCsvBtn" type="button" class="btn-secondary text-sm">
             <span>📊</span>
             <span>سجل القرارات (CSV)</span>
           </button>
 
           <!-- Clear All -->
-          <button id="clearAllBtn" class="btn-secondary text-sm text-red-400 hover:text-red-300 hover:border-red-500/40">
+          <button id="clearAllBtn" type="button" class="btn-secondary text-sm text-red-500 hover:text-red-400 hover:border-red-500/40">
             <span>🗑️</span>
             <span>مسح الكل</span>
           </button>
@@ -330,16 +479,16 @@
       </div>
 
       <!-- Files Table -->
-      <div class="overflow-x-auto rounded-xl border border-gray-800/80">
+      <div class="overflow-x-auto rounded-xl border border-theme">
         <table class="w-full text-right border-collapse">
           <thead>
-            <tr class="bg-gray-900/80 border-b border-gray-800 text-xs font-semibold text-gray-400">
+            <tr class="text-xs font-semibold">
               <th class="p-3 w-12 text-center">#</th>
-              <th class="p-3">اسم الملف</th>
-              <th class="p-3">الحجم الأصلي</th>
-              <th class="p-3">بعد المعالجة</th>
-              <th class="p-3">التخفيض</th>
-              <th class="p-3 text-left">إجراءات</th>
+              <th class="p-3">اسم الملف والمعاينة السريعة</th>
+              <th class="p-3 w-32">الحجم الأصلي</th>
+              <th class="p-3 w-32">بعد المعالجة</th>
+              <th class="p-3 w-28">التخفيض</th>
+              <th class="p-3 w-48 text-left">إجراءات</th>
             </tr>
           </thead>
           <tbody id="filesTableBody">
@@ -357,20 +506,27 @@
     <div class="modal-content">
       
       <!-- Modal Header -->
-      <div class="p-4 sm:p-5 border-b border-gray-800 flex items-center justify-between bg-gray-900/90">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">👁️</span>
+      <div class="modal-header p-4 sm:p-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">👁️</span>
           <div>
-            <h3 id="modalFileName" class="text-base font-bold text-white truncate max-w-sm sm:max-w-md">معاينة الملف</h3>
-            <span id="diffCharStats" class="text-xs text-gray-400 font-mono"></span>
+            <h3 id="modalFileName" class="text-base font-bold text-main truncate max-w-sm sm:max-w-md">معاينة الملف</h3>
+            <div id="diffCharStats" class="flex items-center gap-2 flex-wrap text-xs font-mono mt-0.5"></div>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button id="modalCopyCleanBtn" class="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1">
-            <span>📋</span>
-            <span>نسخ النص المعالج</span>
+          <!-- View Toggle Button: Colored Diff vs Plain -->
+          <button id="modalDiffModeBtn" type="button" class="btn-secondary text-xs px-2.5 py-1.5 flex items-center gap-1" title="تبديل وضع العرض">
+            <span>🎨</span>
+            <span id="diffModeText">إبراز الفروق</span>
           </button>
-          <button id="modalCloseBtn" class="text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-gray-800 text-lg transition">
+
+          <button id="modalCopyCleanBtn" type="button" class="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1">
+            <span>📋</span>
+            <span>نسخ المعالج</span>
+          </button>
+
+          <button id="modalCloseBtn" type="button" class="text-muted-custom hover:text-main p-1.5 rounded-lg hover:bg-theme-tertiary text-lg transition">
             ✕
           </button>
         </div>
@@ -382,31 +538,33 @@
         <!-- Original Pane -->
         <div class="flex flex-col">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-gray-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-red-400"></span>
+            <span class="text-xs font-bold text-red-500 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
               <span>النص الأصلي (قبل المعالجة)</span>
             </span>
+            <span class="text-[11px] text-muted-custom">العناصر المحذوفة مُعلّمة بالأحمر</span>
           </div>
-          <div id="diffOriginalPane" class="diff-pane flex-1 text-gray-300"></div>
+          <div id="diffOriginalPane" class="diff-pane flex-1"></div>
         </div>
 
         <!-- Cleaned Pane -->
         <div class="flex flex-col">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="text-xs font-bold text-emerald-500 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
               <span>النص المعالج (بعد تطبيق القرارات)</span>
             </span>
+            <span class="text-[11px] text-muted-custom">العناصر المعدلة أو المضافة مُعلّمة بالأخضر</span>
           </div>
-          <div id="diffCleanedPane" class="diff-pane flex-1 text-emerald-100"></div>
+          <div id="diffCleanedPane" class="diff-pane flex-1"></div>
         </div>
 
       </div>
 
       <!-- Modal Footer -->
-      <div class="p-3.5 border-t border-gray-800 bg-gray-900/60 flex items-center justify-between text-xs text-gray-400">
-        <span>اضغط <kbd class="px-1.5 py-0.5 rounded bg-gray-800 border border-gray-700 font-mono text-[10px]">Esc</kbd> للخروج من شاشة المعاينة</span>
-        <button onclick="document.getElementById('modalCloseBtn').click()" class="btn-secondary text-xs py-1 px-3">
+      <div class="modal-footer p-3.5 flex items-center justify-between text-xs text-muted-custom">
+        <span>اضغط <kbd class="px-1.5 py-0.5 rounded bg-theme-tertiary border border-theme font-mono text-[10px]">Esc</kbd> للخروج من شاشة المعاينة</span>
+        <button type="button" onclick="document.getElementById('modalCloseBtn').click()" class="btn-secondary text-xs py-1 px-3">
           إغلاق
         </button>
       </div>
@@ -415,17 +573,17 @@
   </div>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-800/80 bg-gray-950/70 py-6 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+  <footer class="border-t border-theme bg-theme-sec py-6 mt-auto transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-custom">
       <div class="flex items-center gap-2">
-        <span>© 2026 معالج ومنظف المدونات العربية</span>
+        <span class="font-bold text-main">© 2026 Corpus Cleaner | منظف المدونات</span>
         <span>•</span>
         <span>مشروع مفتوح المصدر برخصة MIT</span>
       </div>
       <div class="flex items-center gap-4">
-        <span>تصميم وتطوير للأبحاث اللغوية وحوسبة العربية</span>
+        <span>تصميم وتطوير للأبحاث اللغوية وحوسبة اللغات الطبيعية</span>
         <span>•</span>
-        <a href="https://github.com/adam76064/arabic-corpus-cleaner" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">
+        <a href="https://github.com/adam76064/arabic-corpus-cleaner" target="_blank" rel="noopener noreferrer" class="text-emerald-500 hover:underline">
           GitHub Repository
         </a>
       </div>
@@ -434,7 +592,9 @@
 
   <!-- Scripts -->
   <script src="js/jszip.min.js"></script>
+  <script src="js/diff-highlighter.js"></script>
   <script src="js/arabic-preprocessor.js"></script>
+  <script src="js/english-preprocessor.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

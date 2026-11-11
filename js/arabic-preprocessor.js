@@ -12,6 +12,7 @@
   class ArabicPreprocessor {
     // Regular expression patterns
     static RE_URL = /(?:https?:\/\/|ftp:\/\/|www\.)[^\s/$.?#].[^\s]*/gi;
+    static RE_EMAIL = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
     static RE_HTML_COMMENTS = /<!--[\s\S]*?-->/g;
     static RE_HTML_TAGS = /<[^<]+?>/g;
     static RE_HTML_ENTITIES = /&[a-zA-Z0-9#]+;/g;
@@ -35,6 +36,9 @@
     static RE_HAMZA_SEATED_YAA = /ئ/g;
     static RE_TAA_MARBUTA = /[ة\u06C0-\u06C3]/g;
     static RE_ALEF_MAQSURA = /[ى\u06CC]/g;
+
+    static RE_NUMBERS = /[\d\u0660-\u0669\u06F0-\u06F9]+/g;
+    static RE_PUNCTUATION = /[،؛؟«»""''!?:;,.()[\]{}—–\-_/\\*&^%$#@~`|+=<>]/g;
 
     static RE_CONTROL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g;
     static RE_FORMAT_MARKS = /[\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF\u00AD\uFFFD]/g;
@@ -85,7 +89,6 @@
       text = text.replace(this.RE_MD_TABLE_DIVIDER, '');
       text = text.replace(this.RE_MD_LIST_BULLETS, '');
 
-      // Repeatedly strip bold/italic wrappers
       for (let i = 0; i < 3; i++) {
         const next = text.replace(this.RE_MD_BOLD_ITALIC, '$2');
         if (next === text) break;
@@ -95,7 +98,9 @@
     }
 
     static removeLinks(text) {
-      return text.replace(this.RE_URL, '');
+      text = text.replace(this.RE_URL, '');
+      text = text.replace(this.RE_EMAIL, '');
+      return text;
     }
 
     static removeKashida(text) {
@@ -121,6 +126,14 @@
 
     static normalizeYaa(text) {
       return text.replace(this.RE_ALEF_MAQSURA, 'ي');
+    }
+
+    static removePunctuation(text) {
+      return text.replace(this.RE_PUNCTUATION, ' ');
+    }
+
+    static removeNumbers(text) {
+      return text.replace(this.RE_NUMBERS, '');
     }
 
     static removeStrangeChars(text) {
@@ -195,6 +208,14 @@
 
       if (config.normalizeYaa) {
         text = this.normalizeYaa(text);
+      }
+
+      if (config.removeNumbers) {
+        text = this.removeNumbers(text);
+      }
+
+      if (config.removePunctuation) {
+        text = this.removePunctuation(text);
       }
 
       if (config.removeStrangeChars) {
